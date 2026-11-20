@@ -1,0 +1,12 @@
+ВЫЛОЖИТЬ В ИНТЕРНЕТ (Render, бесплатно)
+1. Зарегистрируйся на https://github.com и создай новый репозиторий (New repository).
+2. Нажми "uploading an existing file" и перетащи ВСЕ файлы из этой папки
+   (index.html, server.js, package.json, render.yaml). Нажми Commit.
+3. Зайди на https://render.com, войди через GitHub.
+4. New + -> Web Service -> выбери свой репозиторий.
+   Если спросит: Runtime = Node, Build Command = (пусто или "echo no build"),
+   Start Command = node server.js, Plan = Free.
+5. Через 1-2 минуты Render даст ссылку https://romchik-xxxx.onrender.com
+   Открой её на ПК и телефоне: 🌐 -> "Создать приватную сессию" -> введи код на втором устройстве.
+Примечание: на бесплатном плане сервер засыпает через ~15 минут без посетителей,
+первое открытие после сна занимает до минуты.
