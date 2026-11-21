@@ -1,4 +1,4 @@
-// Сервер игры «Ромчик»: раздаёт index.html и пересылает сообщения между игроками (WebSocket).
+// Сервер игры «Альфредо»: раздаёт index.html и пересылает сообщения между игроками (WebSocket).
 // Без зависимостей. Запуск:  node server.js        (порт 1220, или PORT=3000 node server.js)
 // Файл игры лежит рядом и называется index.html (или: node server.js другой.html)
 const http=require('http'),fs=require('fs'),path=require('path'),crypto=require('crypto'),os=require('os');
