@@ -454,6 +454,13 @@ namespace Romchik
                     Respond(ns, 200, "OK", "text/plain;charset=utf-8", Encoding.UTF8.GetBytes("ok " + cnt));
                     return;
                 }
+                if (path == "/shakhed.mp3")
+                {
+                    string audio = Path.Combine(Path.GetDirectoryName(file) ?? AppDomain.CurrentDomain.BaseDirectory, "shakhed.mp3");
+                    if (File.Exists(audio)) Respond(ns, 200, "OK", "audio/mpeg", File.ReadAllBytes(audio));
+                    else Respond(ns, 404, "Not Found", "text/plain;charset=utf-8", new byte[0]);
+                    return;
+                }
                 if (path == "/favicon.ico")
                 {
                     Respond(ns, 404, "Not Found", "text/plain;charset=utf-8", new byte[0]);

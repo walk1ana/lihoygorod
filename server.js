@@ -8,6 +8,7 @@ const rid=()=>'p'+crypto.randomBytes(5).toString('hex');
 
 const srv=http.createServer((req,res)=>{
  if(req.url.split('?')[0]==='/health'){res.end('ok '+peers.size);return}
+ if(req.url.split('?')[0]==='/shakhed.mp3'){const a=path.resolve(__dirname,'shakhed.mp3');fs.readFile(a,(e,b)=>{if(e){res.writeHead(404);res.end();return}res.writeHead(200,{'content-type':'audio/mpeg','cache-control':'public,max-age=86400','accept-ranges':'bytes','content-length':b.length});res.end(b)});return}
  fs.readFile(FILE,'utf8',(e,html)=>{if(e){res.writeHead(500,{'content-type':'text/plain;charset=utf-8'});res.end('Не найден '+FILE);return}
   const inj='<script>window.LG_RELAY=(location.protocol==="https:"?"wss://":"ws://")+location.host+"/ws";</script>';
   html=html.replace('<head>','<head>'+inj);res.writeHead(200,{'content-type':'text/html;charset=utf-8','cache-control':'no-store'});res.end(html)})});
