@@ -41,6 +41,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);over
 #bShahed{right:max(24px,env(safe-area-inset-right,0px));bottom:calc(290px + env(safe-area-inset-bottom,0px));background:rgba(255,80,40,.45)}body.incar #bShahed{display:none}
 #bArt{right:max(108px,calc(84px + env(safe-area-inset-right,0px)));bottom:calc(204px + env(safe-area-inset-bottom,0px));background:rgba(255,176,40,.48)}body.incar #bArt{display:none}
 #bRecon{right:max(24px,env(safe-area-inset-right,0px));bottom:calc(376px + env(safe-area-inset-bottom,0px));width:64px;height:64px;font-size:12px;background:rgba(64,224,255,.55);border-color:#40e0ff}body.incar #bRecon{display:none}
+#bPantsir{right:max(24px,env(safe-area-inset-right,0px));bottom:calc(462px + env(safe-area-inset-bottom,0px));width:64px;height:64px;font-size:11px;background:rgba(132,172,100,.55);border-color:#a8c78b}body.incar #bPantsir{display:none}
 body.rchase #rr{display:none}#ri{pointer-events:auto}
 #rc{position:fixed;inset:0;z-index:3;pointer-events:none;display:none}body.recon #rc{display:block}
 #rr{position:absolute;left:50%;top:50%;width:64px;height:64px;margin:-32px;border:2px solid #ff3b4e;border-radius:50%}#rr.cd{border-color:#9a94a0}
@@ -203,6 +204,7 @@ body.incar #bAct{right:max(104px,calc(98px + env(safe-area-inset-right,0px)));bo
   <div class="tb s" id="bShahed">ШАХЕД</div>
   <div class="tb s" id="bArt">АРТ.</div>
    <div class="tb s" id="bRecon">РАЗВЕД<br>ДРОН</div>
+   <div class="tb s" id="bPantsir">ПАНЦИРЬ</div>
   <div class="tb s" id="bWep">ОРУЖ.</div>
  </div>
 </div>
@@ -227,6 +229,7 @@ body.incar #bAct{right:max(104px,calc(98px + env(safe-area-inset-right,0px)));bo
   <dt>R</dt><dd>с шахеда вывести артиллерийский залп по точке дрона</dd>
   <dt>J</dt><dd>разведдрон: полёт W/S/A/D, Пробел/Shift высота, мышь — наклон камеры, колесо — зум. Центр экрана — цель: ЛКМ/F выстрел, R залп, E выйти, V (или тап по панели) — вид со стороны. Видно прилёты, недолёт/перелёт и состояние дома</dd>
    <dt>E у артиллерии</dt><dd>управлять установкой: A/D — поворот, W/S — дальность, R/F — выстрел, E — выйти</dd>
+   <dt>ПАНЦИРЬ</dt><dd>на телефоне — кнопка ПАНЦИРЬ, после посадки джойстик едет, ОГОНЬ/F/R — залп по разведдрону или вперёд, E — выйти</dd>
   <dt>F</dt><dd>выстрел</dd>
   <dt>1 / 2 / 3 / 4 / Q</dt><dd>пистолет / коктейль Климова / АК-47 / РПГ-7 (F — выстрел)</dd>
   <dt>Пробел</dt><dd>прыжок (в машине — ручник)</dd>
@@ -1206,6 +1209,8 @@ function heliBail(c){player.car=null;c.kind='parked';player.m.visible=true;playe
  ragStart(player.m,c.x,c.z,sx,sz,out?3:0);const r=player.m.userData.rag;r.y=c.y-HGY+1.2;r.step=fallStep;r.land=fallLand;if(out)r.out=out;
  player.fall=1;player.x=c.x;player.z=c.z;player.spd=0;beep(200,.12,'square',.1);toast(roof?'Тебя сбросило с крыши!':'Выпал из вертолёта!','#ff3b4e')}
 function interact(){if(paused||cine||player.ent||player.ext||player.fall)return;if(player.jail){jailTalk();return}
+ if(PNT.active){exitPantsir();return}
+ if(started&&!player.dead&&!player.car&&PNT&&Math.hypot(player.x-PNT.x,player.z-PNT.z)<12){togglePantsir();return}
  if(started&&!player.dead&&!player.car&&Math.hypot(player.x-ART.x,player.z-ART.z)<11){enterArtillery();return}
  if(started&&!player.dead&&!player.car){const sp=casSpot();if(sp){openCas(sp.game);return}const ds=doorSpot();if(ds){enterInt(ds);return}const hs=hoboSpot();if(hs){giveHobo(hs);return}const is=inSpot();if(is){useSpot(is);return}}
  if(!started||player.dead)return;
@@ -1398,7 +1403,7 @@ function drawMap(){
  const dot=(x,z,col,r)=>{let[a,c]=S(x,z);const dx=a-W/2,dz=c-W/2,d=Math.hypot(dx,dz),lim=W/2-8;if(d>lim){a=W/2+dx/d*lim;c=W/2+dz/d*lim}mx.fillStyle=col;mx.beginPath();mx.arc(a,c,r,0,7);mx.fill()};
  {const[a1,c1]=S(SZ/2,SZ/2);mx.fillStyle='#3f7a45';mx.fillRect(a1-(P-RW/2)*MS,c1-(P-RW/2)*MS,(2*P-RW)*MS,(2*P-RW)*MS);mx.fillStyle='#3a86c0';mx.beginPath();mx.ellipse(a1,c1,LRX*MS,LRZ*MS,0,0,7);mx.fill()}
  for(const d of DOORS)if(d.sp){const[a0,c0]=S(d.x,d.z);if(Math.hypot(a0-W/2,c0-W/2)<W/2-8)dot(d.x,d.z,SPC[d.type],5)}
- dot(ART.x,ART.z,'#fff',11);dot(ART.x,ART.z,'#ffb21e',8);if(RC.active){dot(RC.x,RC.z,'#40e0ff',7);if(RC.ok)dot(RC.tx,RC.tz,'#ff3b4e',5)}
+ dot(ART.x,ART.z,'#fff',11);dot(ART.x,ART.z,'#ffb21e',8);dot(PNT.x,PNT.z,'#fff',10);dot(PNT.x,PNT.z,'#a8c78b',7);if(RC.active){dot(RC.x,RC.z,'#40e0ff',7);if(RC.ok)dot(RC.tx,RC.tz,'#ff3b4e',5)}
  if(mis.stage<2)dot(mis.x,mis.z,mis.stage?'#ffb21e':'#40e0ff',9);
  for(const c of cars)if(c.skull&&!c.dead)dot(c.x,c.z,'#3dff6a',7);for(const c of CH)if(c!==CUR)dot(c.x,c.z,c.col,6);
  for(const c of cars)if(c.kind==='police'&&!c.dead)dot(c.x,c.z,Math.floor(time*4)%2?'#ff3b4e':'#3a7bff',6);for(const c of cars)if(c.kind==='fire'&&!c.dead)dot(c.x,c.z,'#ff8a3a',6);for(const w of WRECKS)if(w.burn)dot(w.c.x,w.c.z,Math.floor(time*5)%2?'#ff5a1a':'#ffd23a',5);for(const h of HELIS)if(h.kind==='police')dot(h.x,h.z,Math.floor(time*4)%2?'#ff3b4e':'#3a7bff',6);
@@ -1407,7 +1412,7 @@ function drawMap(){
  mx.translate(W/2,W/2);mx.rotate(Math.PI-(player.car?player.car.h:player.h));mx.fillStyle='#fff';mx.strokeStyle='#000';mx.lineWidth=3;
  mx.beginPath();mx.moveTo(0,-13);mx.lineTo(9,10);mx.lineTo(0,5);mx.lineTo(-9,10);mx.closePath();mx.stroke();mx.fill();mx.restore()}
 // ===== input =====
-addEventListener('keydown',e=>{keys[e.code]=true;if(e.code==='KeyC'){camOff=0;camP=0;camZ=1;camUser=false}if(e.code==='KeyE'&&!e.repeat){if(RC.active){stopRecon();return}if(ART.controlled){exitArtillery();return}if(SHA.active){stopShahed(false);return}interact();return}if(e.code==='KeyJ'&&!e.repeat){toggleRecon();return}if(e.code==='KeyV'&&!e.repeat&&RC.active){RC.chase=!RC.chase;document.body.classList.toggle('rchase',RC.chase);return}if(e.code==='KeyG'&&!e.repeat){if(RC.active)return;toggleShahed();return}if(e.code==='KeyR'&&!e.repeat){fireArtillery();return}if(e.code==='KeyH'&&!e.repeat&&!RC.active)callHeli();if(e.code==='KeyF'){if(RC.active){reconFire(1);return}if(ART.controlled){fireArtillery();return}if(SHA.active){explodeShahed();return}fire()}if(e.code==='Digit1')setWeapon(0);if(e.code==='Digit2')setWeapon(1);if(e.code==='Digit3')setWeapon(2);if(e.code==='Digit4')setWeapon(3);if(e.code==='KeyQ')setWeapon((weapon+1)%4);if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault()});
+addEventListener('keydown',e=>{keys[e.code]=true;if(e.code==='KeyC'){camOff=0;camP=0;camZ=1;camUser=false}if(e.code==='KeyE'&&!e.repeat){if(PNT.active){exitPantsir();return}if(RC.active){stopRecon();return}if(ART.controlled){exitArtillery();return}if(SHA.active){stopShahed(false);return}interact();return}if(e.code==='KeyJ'&&!e.repeat){toggleRecon();return}if(e.code==='KeyV'&&!e.repeat&&RC.active){RC.chase=!RC.chase;document.body.classList.toggle('rchase',RC.chase);return}if(e.code==='KeyG'&&!e.repeat){if(RC.active||PNT.active)return;toggleShahed();return}if(e.code==='KeyR'&&!e.repeat){if(PNT.active){pantsirFire();return}fireArtillery();return}if(e.code==='KeyH'&&!e.repeat&&!RC.active&&!PNT.active)callHeli();if(e.code==='KeyF'){if(PNT.active){pantsirFire();return}if(RC.active){reconFire(1);return}if(ART.controlled){fireArtillery();return}if(SHA.active){explodeShahed();return}fire()}if(e.code==='Digit1')setWeapon(0);if(e.code==='Digit2')setWeapon(1);if(e.code==='Digit3')setWeapon(2);if(e.code==='Digit4')setWeapon(3);if(e.code==='KeyQ')setWeapon((weapon+1)%4);if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault()});
 addEventListener('keyup',e=>{keys[e.code]=false});
 const ptrs=new Map();let pinch0=0;
 $('c').addEventListener('pointerdown',e=>{ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});if(ptrs.size===2){const[a,b]=[...ptrs.values()];pinch0=Math.hypot(a.x-b.x,a.y-b.y)}});
@@ -1449,6 +1454,7 @@ $('bAct').addEventListener('pointerdown',e=>{interact();e.stopPropagation()});
 $('bHeli').addEventListener('pointerdown',e=>{callHeli();e.stopPropagation()});
 $('bShahed').addEventListener('pointerdown',e=>{if(!RC.active)toggleShahed();e.stopPropagation()});
 $('bArt').addEventListener('pointerdown',e=>{fireArtillery();e.stopPropagation()});$('bRecon').addEventListener('pointerdown',e=>{toggleRecon();e.stopPropagation()});
+$('bPantsir').addEventListener('pointerdown',e=>{togglePantsir();e.stopPropagation()});
 const gq=$('gq'),gqL=()=>{const t='ГРАФИКА: '+(HQ?'ВЫСОКАЯ':'ЛЁГКАЯ');gq.textContent=t;$('mGfx').textContent=t};gqL();gq.addEventListener('click',()=>{setHQ(!HQ);gqL()});
 $('go').addEventListener('click',()=>{$('intro').style.display='none';started=true;plLock();startCine('intro');audioInit();sampleInit();akShotInit();if(muted&&AC)AC.suspend();engineSampleInit();
  if(IS_TOUCH){try{const r=document.documentElement,f=r.requestFullscreen||r.webkitRequestFullscreen;if(f){const p=f.call(r);p&&p.catch&&p.catch(()=>{})}}catch(e){}}});
@@ -1473,7 +1479,8 @@ function frame(now){
  const dt=(paused&&!NET.on)?0:Math.min(.05,(now-last)/1000);last=now;time+=dt;
  const pc=player.car;if(pc){player.y=0;player.vy=0}
  if(started&&!player.dead&&!player.fall&&!(paused&&NET.on)){
-   if(ART.controlled){player.spd=0}
+   if(PNT.active){updatePantsir(dt)}
+   else if(ART.controlled){player.spd=0}
    else if(RC.active){updateRecon(dt)}else if(SHA.active){updateShahed(dt)}
    else if(pc&&pc.isHeli){heliCtl(pc,dt);player.x=pc.x;player.z=pc.z;player.h=pc.h}
    else if(pc){{const tg=(touch.r?1:0)-(touch.l?1:0),dd=dt*(tg===0||tg*tsv<0?9:5);tsv=Math.abs(tg-tsv)<dd?tg:tsv+Math.sign(tg-tsv)*dd}const thr=(keys.KeyW||keys.ArrowUp?1:0)-(keys.KeyS||keys.ArrowDown?1:0)-touch.y+(touch.gas?1:0)-(touch.rev?1:0),str=(keys.KeyD||keys.ArrowRight?1:0)-(keys.KeyA||keys.ArrowLeft?1:0)+touch.x+tsv;
@@ -1521,7 +1528,8 @@ function frame(now){
  // camera
  if(appearOpen&&!pc&&!player.jail){player.h+=.012;const py=terrainHeight(player.x,player.z);camera.position.set(player.x+Math.sin(player.h*0+.6)*3.4,py+1.9,player.z+Math.cos(.6)*3.4+0);camera.lookAt(player.x,py+1.35,player.z);camera.fov=45;camera.updateProjectionMatrix()}else if(!started){camera.fov=BF;camera.updateProjectionMatrix();const a=time*.12;camera.position.set(SZ/2+Math.sin(a)*190,70,SZ/2+Math.cos(a)*190);camera.lookAt(SZ/2,15,SZ/2)}
  else{
-  if(ART.controlled){const sx=Math.sin(ART.h),cx=Math.cos(ART.h);camera.position.set(ART.x-sx*8,ART.y+7,ART.z-cx*8);camera.lookAt(ART.targetX,terrainHeight(ART.targetX,ART.targetZ)+.8,ART.targetZ);camera.fov=55}
+  if(PNT.active){const sx=Math.sin(PNT.h),cx=Math.cos(PNT.h);camera.position.set(PNT.x-sx*16,PNT.y+9,PNT.z-cx*16);camera.lookAt(PNT.x+sx*15,PNT.y+2,PNT.z+cx*15);camera.fov=62}
+  else if(ART.controlled){const sx=Math.sin(ART.h),cx=Math.cos(ART.h);camera.position.set(ART.x-sx*8,ART.y+7,ART.z-cx*8);camera.lookAt(ART.targetX,terrainHeight(ART.targetX,ART.targetZ)+.8,ART.targetZ);camera.fov=55}
   else if(RC.active){reconCam()}else if(SHA.active){const sx=Math.sin(SHA.h),cx=Math.cos(SHA.h),dist=11;camera.position.set(SHA.x-sx*dist,SHA.y+6,SHA.z-cx*dist);const vx=ART.viewT>0?ART.viewX:SHA.x,vy=ART.viewT>0?ART.viewY:SHA.y,vz=ART.viewT>0?ART.viewZ:SHA.z;camera.lookAt(vx,vy,vz);camera.fov=ART.viewT>0?72:60}
   else if(pc){camA+=angDiff(camA,pc.h+camOff+(!camUser&&pc.v<-1?Math.PI:0))*Math.min(1,dt*3);
    const sx=Math.sin(camA),cx=Math.cos(camA),pit=clamp(.38+camP,-.3,1.45),dist=(pc.isHeli?24:11.5)*camZ,tx=pc.x+sx*3,tz=pc.z+cx*3,ty=pc.isHeli?pc.y:terrainHeight(pc.x,pc.z)+1.3;
@@ -1535,8 +1543,8 @@ function frame(now){
  // HUD
  $('cash').textContent='$'+player.cash;$('wep').textContent=weapon===0?'ПИСТОЛЕТ':weapon===1?'КОКТЕЙЛЬ КЛИМОВА ×'+molN:weapon===2?'АК-47':'РПГ-7 ×'+rpgN;$('hp').style.width=Math.max(0,player.hp)+'%';
  let s='';for(let i=0;i<5;i++)s+=i<stars?'<b>★</b>':'★';const se=$('stars');if(se._s!==s){se.innerHTML=s;se._s=s}se.classList.toggle('blink',stars>0&&near);
- $('speed').textContent=pc?Math.round(Math.abs(pc.v)*3.6)+' км/ч'+(pc.isHeli?' · высота '+Math.round(pc.y-HGY)+' м':''):'';
- casHint();if(touchVisible){const bl=pc?(pc.isHeli?'ВВЕРХ':'РУЧНИК'):'ПРЫЖОК';if($('bBrake').textContent!==bl)$('bBrake').textContent=bl;setCarUI(!!pc&&!player.jail);let lab=player.jail?'ГОВОРИТЬ':casSpot()?'ИГРАТЬ':doorSpot()?'ВОЙТИ':hoboSpot()?'ДАТЬ $10':inSpot()?(inSpot().kind==='exit'?'ВЫЙТИ':'ДЕЙСТВИЕ'):(pc||NET.ride)?'ВЫЙТИ':'СЕСТЬ';if($('bAct').textContent!==lab)$('bAct').textContent=lab}
+ $('speed').textContent=PNT.active?Math.round(Math.hypot(PNT.vx,PNT.vz)*3.6)+' км/ч · ПАНЦИРЬ '+PNT.ammo+' снар.':pc?Math.round(Math.abs(pc.v)*3.6)+' км/ч'+(pc.isHeli?' · высота '+Math.round(pc.y-HGY)+' м':''):'';
+ casHint();if(touchVisible){const bl=PNT.active?'ТОРМОЗ':pc?(pc.isHeli?'ВВЕРХ':'РУЧНИК'):'ПРЫЖОК';if($('bBrake').textContent!==bl)$('bBrake').textContent=bl;setCarUI((!!pc||PNT.active)&&!player.jail);let lab=PNT.active?'ВЫЙТИ':player.jail?'ГОВОРИТЬ':casSpot()?'ИГРАТЬ':doorSpot()?'ВОЙТИ':hoboSpot()?'ДАТЬ $10':inSpot()?(inSpot().kind==='exit'?'ВЫЙТИ':'ДЕЙСТВИЕ'):(pc||NET.ride)?'ВЫЙТИ':'СЕСТЬ';if($('bAct').textContent!==lab)$('bAct').textContent=lab}
  if(toastT>0&&(toastT-=dt)<=0)$('toast').classList.remove('on');
  if(started&&!player.inr)drawMap();if(player.inr)for(const q of DCARS)q.rotation.y+=dt*.5;for(const f of FIRES)f.scale.y=.38+.14*Math.sin(time*11+f.position.x);
  // sound
@@ -1812,6 +1820,7 @@ function drawBig(){const cv=$('bmc'),c=cv.getContext('2d'),dpr=Math.min(2,device
  c.fillStyle='#f4f1e8';c.fillRect(X(VX+20-6),Z(HZ-82-8),12*sc,16*sc);gl(VX+20,HZ-82,'✝','#c9a020',14);
  gl(VX,HZ-VR+18,'ДЕРЕВНЯ БЕРЁЗОВКА','#fff3c8',15);gl((SZ+VX-VR)/2,HZ-22,'ТРАССА','#e8e8f0',12);gl(SZ/2,JR0*P-34,'ГОРОД','#e8e8f0',16);gl(XRC,HZ+36,'МОСТ · РЕКА БЕРЁЗОВКА','#d6ecff',12);
  c.strokeStyle='#fff';c.lineWidth=Math.max(2,3*k);c.beginPath();c.arc(X(ART.x),Z(ART.z),11*k,0,7);c.stroke();c.fillStyle='#ffb21e';c.beginPath();c.arc(X(ART.x),Z(ART.z),7*k,0,7);c.fill();gl(ART.x,ART.z+18,'АРТИЛЛЕРИЯ','#fff3c8',12);
+ c.strokeStyle='#a8c78b';c.lineWidth=Math.max(2,3*k);c.beginPath();c.arc(X(PNT.x),Z(PNT.z),10*k,0,7);c.stroke();c.fillStyle='#687050';c.beginPath();c.arc(X(PNT.x),Z(PNT.z),6*k,0,7);c.fill();gl(PNT.x,PNT.z+16,'ПАНЦИРЬ','#e9f1dc',11);
  for(const d of DOORS){c.fillStyle=d.sp?SPC[d.type]:DCOL[d.type];c.beginPath();c.arc(X(d.x),Z(d.z),(d.sp?7:2)*k,0,7);c.fill();if(d.sp)gl(d.x,d.z,DLET[d.type],'#111',10)}
  for(const q of cars)if(q.kind==='police'&&!q.dead){c.fillStyle=Math.floor(time*4)%2?'#ff3b4e':'#3a7bff';c.beginPath();c.arc(X(q.x),Z(q.z),4*k,0,7);c.fill()}
  for(const q of cars)if(q.kind==='fire'&&!q.dead){c.fillStyle='#ff8a3a';c.beginPath();c.arc(X(q.x),Z(q.z),4*k,0,7);c.fill()}for(const q of cars)if(q.skull&&!q.dead){c.fillStyle='#3dff6a';c.beginPath();c.arc(X(q.x),Z(q.z),5*k,0,7);c.fill()}
@@ -1972,6 +1981,56 @@ function buildArtillery(){
  marker.visible=false;scene.add(marker);ART.marker=marker;
 }
 buildArtillery();
+
+const PNT={active:false,x:ART.x+24,z:ART.z-48,y:0,h:0,vx:0,vz:0,cd:0,ammo:16,m:null,turret:null,barrels:[]};
+function buildPantsir(){
+ PNT.y=terrainHeight(PNT.x,PNT.z);
+ const g=new THREE.Group(),olive=mat(0x687050),dark=mat(0x242824),metal=mat(0x9aa08d);
+ g.add(mk(GB,olive,7.2,1.2,3.8,0,.95,0));
+ g.add(mk(GB,dark,7.8,.32,1.1,0,.28,-1.7));g.add(mk(GB,dark,7.8,.32,1.1,0,.28,1.7));
+ for(const sx of[-1,1])for(let k=0;k<5;k++){const wh=mk(CYL,dark,.72,.72,.36,sx*3.55,.35,-1.8+k*.9);wh.rotation.z=Math.PI/2;g.add(wh)}
+ const turret=new THREE.Group();turret.position.set(0,1.65,.2);turret.rotation.order='YXZ';
+ turret.add(mk(CYL,olive,2.05,2.05,.75,0,.05,0));
+ const barrels=[];
+ for(const sx of[-1,1])for(let k=0;k<3;k++){const tube=mk(CYL,metal,.18,.18,4.6,sx*(.55+k*.08),.42,k*.18);tube.rotation.x=Math.PI/2;turret.add(tube);barrels.push(tube)}
+ turret.add(mk(GB,dark,4.8,.12,.7,0,-.35,-.2));
+ g.add(turret);g.position.set(PNT.x,PNT.y,PNT.z);g.rotation.order='YXZ';scene.add(g);shadowize(g);
+ PNT.m=g;PNT.turret=turret;PNT.barrels=barrels;
+}
+buildPantsir();
+function togglePantsir(){
+ if(!started||player.dead||player.fall||player.inr||player.jail||player.ent||player.ext||paused||cine)return;
+ if(PNT.active){exitPantsir();return}
+ if(RC.active||SHA.active||ART.controlled||player.car){toast('Сначала выйди из машины и отключи дроны','#ffb21e');return}
+ if(Math.hypot(player.x-PNT.x,player.z-PNT.z)>12){toast('Подойди к Панцирю','#ffb21e');return}
+ PNT.active=true;PNT.vx=PNT.vz=0;PNT.h=PNT.m.rotation.y;player.m.visible=false;player.spd=0;
+ toast('Панцирь-С1 · джойстик/GAS — ехать · A/D — поворот · F/R — залп · E — выйти','#a8c78b')}
+function exitPantsir(){
+ if(!PNT.active)return;PNT.active=false;player.m.visible=true;player.x=PNT.x-Math.sin(PNT.h)*6;player.z=PNT.z-Math.cos(PNT.h)*6;player.y=0;player.vy=0;PNT.vx=PNT.vz=0;
+ toast('Панцирь оставлен','#4fe3a0')}
+function pantsirFire(){
+ if(!PNT.active)return;if(PNT.cd>0||PNT.ammo<2){toast(PNT.cd>0?'Перезарядка Панциря':'Боезапас Панциря кончился','#ffb21e');return}
+ PNT.cd=4.5;PNT.ammo-=2;
+ const tx=RC.active&&RC.ok?RC.tx:PNT.x+Math.sin(PNT.h)*260,tz=RC.active&&RC.ok?RC.tz:PNT.z+Math.cos(PNT.h)*260;
+ PNT.turret.rotation.y=Math.atan2(tx-PNT.x,tz-PNT.z)-PNT.h;
+ for(let k=0;k<2;k++){
+  const spread=k===0?-3:3,delay=k*.18;
+  const m=new THREE.Mesh(new THREE.CylinderGeometry(.14,.14,1.8,10),mat(k?0xf0c04a:0xdad8b0));scene.add(m);m.rotation.x=Math.PI/2;
+  ART.shells.push({m,x:PNT.x+spread,z:PNT.z,y:PNT.y+3.8,ox:PNT.x,oy:PNT.y+3.8,oz:PNT.z,tx:tx+R(-5,5),tz:tz+R(-5,5),t:-delay,dur:3.2,height:22,hit:false,pantsir:true})}
+ beep(55,.5,'sawtooth',.16);toast('Залп Панциря · боезапас '+PNT.ammo,'#a8c78b')}
+function updatePantsir(dt){
+ PNT.cd=Math.max(0,PNT.cd-dt);
+ const thr=(keys.KeyW||keys.ArrowUp?1:0)-(keys.KeyS||keys.ArrowDown?1:0)+(touch.gas?1:0)-(touch.rev?1:0)-touch.y;
+ const steer=(keys.KeyD||keys.ArrowRight?1:0)-(keys.KeyA||keys.ArrowLeft?1:0)+touch.x+((touch.r?1:0)-(touch.l?1:0));
+ PNT.h-=steer*dt*.7*(Math.abs(PNT.vx)+Math.abs(PNT.vz)>1?1:.25);
+ const tx=Math.sin(PNT.h)*thr*18,tz=Math.cos(PNT.h)*thr*18,k=Math.min(1,dt*2.2);
+ PNT.vx+=(tx-PNT.vx)*k;PNT.vz+=(tz-PNT.vz)*k;PNT.x=clamp(PNT.x+PNT.vx*dt,2,SZ-2);PNT.z=clamp(PNT.z+PNT.vz*dt,2,SZ-2);PNT.y=terrainHeight(PNT.x,PNT.z);
+ PNT.m.position.set(PNT.x,PNT.y,PNT.z);PNT.m.rotation.y=PNT.h;
+ const tw=(RC.active&&RC.ok)?Math.atan2(RC.tx-PNT.x,RC.tz-PNT.z)-PNT.h:PNT.h;
+ PNT.turret.rotation.y+=(tw-PNT.turret.rotation.y)*Math.min(1,dt*3);PNT.turret.rotation.x=.28;
+ player.x=PNT.x;player.z=PNT.z;player.y=0;player.h=PNT.h;player.spd=Math.hypot(PNT.vx,PNT.vz);
+ if((touch.fire||mouseFire)&&PNT.cd<=0){mouseFire=false;pantsirFire()}
+}
 
 // ===== РАЗВЕДДРОН: сам наводит артиллерию, показывает прилёты и разрушение домов =====
 const RC={active:false,ok:false,x:0,y:45,z:0,h:0,vx:0,vz:0,vy:0,tx:0,ty:0,tz:0,dist:0,cd:0,shk:0,err:null,bld:null,kills:0,log:[],key:''};
@@ -2136,7 +2195,8 @@ function updateArtillery(dt){updateBldg(dt);
  for(let i=ART.shells.length-1;i>=0;i--){
   const s=ART.shells[i];s.t+=dt;if(s.t<0)continue;
   const k=clamp(s.t/s.dur,0,1),q=Math.sin(k*Math.PI);
-  s.x=ART.x+(s.tx-ART.x)*k;s.z=ART.z+(s.tz-ART.z)*k;s.y=ART.y+4+s.height*q;
+  const ox=s.pantsir?(s.ox||PNT.x):ART.x,oy=s.pantsir?(s.oy||PNT.y+3.8):ART.y+4,oz=s.pantsir?(s.oz||PNT.z):ART.z;
+  s.x=ox+(s.tx-ox)*k;s.z=oz+(s.tz-oz)*k;s.y=oy+s.height*q;
   s.m.position.set(s.x,s.y,s.z);
   if(SHA.active&&ART.viewT>0){ART.viewX=s.x;ART.viewY=s.y;ART.viewZ=s.z}
   if(k>0&&k<1&&Math.random()<.6)fp(3,s.x,s.y,s.z,R(-.4,.4),R(-.2,.3),R(-.4,.4),.65,.45);
