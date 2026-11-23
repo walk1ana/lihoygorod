@@ -1995,7 +1995,8 @@ function buildPantsir(){
  for(const sx of[-1,1])for(let k=0;k<3;k++){const tube=mk(CYL,metal,.18,.18,4.6,sx*(.55+k*.08),.42,k*.18);tube.rotation.x=Math.PI/2;turret.add(tube);barrels.push(tube)}
  turret.add(mk(GB,dark,4.8,.12,.7,0,-.35,-.2));
  g.add(turret);g.position.set(PNT.x,PNT.y,PNT.z);g.rotation.order='YXZ';scene.add(g);shadowize(g);
- PNT.m=g;PNT.turret=turret;PNT.barrels=barrels;
+ const label=chTag('ПАНЦИРЬ-С1','#a8c78b');label.position.set(0,6.2,0);label.scale.set(5.2,1.15,1);g.add(label);
+ PNT.m=g;PNT.turret=turret;PNT.barrels=barrels;PNT.label=label;
 }
 buildPantsir();
 function togglePantsir(){
