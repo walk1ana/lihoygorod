@@ -40,12 +40,15 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);over
 #bHeli{right:max(24px,env(safe-area-inset-right,0px));bottom:calc(204px + env(safe-area-inset-bottom,0px))}body.incar #bHeli{display:none}
 #bShahed{right:max(24px,env(safe-area-inset-right,0px));bottom:calc(290px + env(safe-area-inset-bottom,0px));background:rgba(255,80,40,.45)}body.incar #bShahed{display:none}
 #bArt{right:max(108px,calc(84px + env(safe-area-inset-right,0px)));bottom:calc(204px + env(safe-area-inset-bottom,0px));background:rgba(255,176,40,.48)}body.incar #bArt{display:none}
-#bRecon{right:max(108px,calc(84px + env(safe-area-inset-right,0px)));bottom:calc(290px + env(safe-area-inset-bottom,0px));background:rgba(64,224,255,.4)}body.incar #bRecon{display:none}
+#bRecon{right:max(24px,env(safe-area-inset-right,0px));bottom:calc(376px + env(safe-area-inset-bottom,0px));width:64px;height:64px;font-size:12px;background:rgba(64,224,255,.55);border-color:#40e0ff}body.incar #bRecon{display:none}
 body.rchase #rr{display:none}#ri{pointer-events:auto}
 #rc{position:fixed;inset:0;z-index:3;pointer-events:none;display:none}body.recon #rc{display:block}
 #rr{position:absolute;left:50%;top:50%;width:64px;height:64px;margin:-32px;border:2px solid #ff3b4e;border-radius:50%}#rr.cd{border-color:#9a94a0}
 #rr:before,#rr:after{content:"";position:absolute;background:currentColor;color:inherit}#rr:before{left:50%;top:-14px;bottom:-14px;width:2px;margin-left:-1px;background:#ff3b4e}#rr:after{top:50%;left:-14px;right:-14px;height:2px;margin-top:-1px;background:#ff3b4e}#rr.cd:before,#rr.cd:after{background:#9a94a0}
 #ri{position:absolute;left:50%;top:62px;transform:translateX(-50%);background:var(--panel);padding:8px 14px;border-radius:12px;font:600 13px/1.5 var(--body);text-align:center;white-space:nowrap;max-width:94vw;color:var(--ink)}#ri b{font:18px/1 var(--display);letter-spacing:.06em;color:#40e0ff}
+#rV,#rF{position:absolute;z-index:4;pointer-events:auto;width:70px;height:70px;border-radius:50%;border:2px solid rgba(255,255,255,.35);color:#fff;font:600 12px/1 var(--body);touch-action:none}
+#rV{right:max(20px,env(safe-area-inset-right,0px));bottom:calc(118px + env(safe-area-inset-bottom,0px));background:rgba(64,224,255,.55)}
+#rF{right:max(20px,env(safe-area-inset-right,0px));bottom:calc(28px + env(safe-area-inset-bottom,0px));background:rgba(255,59,78,.75)}
 #rl{position:absolute;left:max(16px,env(safe-area-inset-left,0px));top:38%;font:600 14px/1.5 var(--body);text-shadow:0 2px 0 rgba(0,0,0,.7)}
 #bWep{right:max(108px,calc(84px + env(safe-area-inset-right,0px)));bottom:calc(114px + env(safe-area-inset-bottom,0px))}
 #bAct{right:max(24px,env(safe-area-inset-right,0px));bottom:calc(30px + env(safe-area-inset-bottom,0px))}
@@ -199,11 +202,11 @@ body.incar #bAct{right:max(104px,calc(98px + env(safe-area-inset-right,0px)));bo
   <div class="tb s" id="bHeli">ВЕРТ.</div>
   <div class="tb s" id="bShahed">ШАХЕД</div>
   <div class="tb s" id="bArt">АРТ.</div>
-   <div class="tb s" id="bRecon">ДРОН</div>
+   <div class="tb s" id="bRecon">РАЗВЕД<br>ДРОН</div>
   <div class="tb s" id="bWep">ОРУЖ.</div>
  </div>
 </div>
-<div id="rc"><div id="rr"></div><div id="ri"></div><div id="rl"></div></div>
+<div id="rc"><div id="rr"></div><div id="ri"></div><div id="rl"></div><button id="rV" type="button">ВИД</button><button id="rF" type="button">ЗАЛП</button></div>
 <div id="chint"></div>
 <div id="cas"><div class="ch"><b id="cT">КАЗИНО</b><span id="cB">$0</span><button id="cX" aria-label="Закрыть">✕</button></div><div id="cBody"></div></div>
 <div id="flash"></div>
@@ -222,7 +225,7 @@ body.incar #bAct{right:max(104px,calc(98px + env(safe-area-inset-right,0px)));bo
   <dt>H</dt><dd>вызвать вертолёт (в нём: W/S вперёд-назад, A/D поворот, Пробел вверх, Shift вниз, E — выйти на земле)</dd>
   <dt>G</dt><dd>запустить / отключить шахед-пульт (W/S — вперёд-назад, A/D — поворот, Пробел вверх, Shift вниз, F — взрыв, E — выйти)</dd>
   <dt>R</dt><dd>с шахеда вывести артиллерийский залп по точке дрона</dd>
-  <dt>T</dt><dd>разведдрон: полёт W/S/A/D, Пробел/Shift высота, мышь — наклон камеры, колесо — зум. Центр экрана — цель: ЛКМ/F выстрел, R залп, E выйти, V (или тап по панели) — вид со стороны. Видно прилёты, недолёт/перелёт и состояние дома</dd>
+  <dt>J</dt><dd>разведдрон: полёт W/S/A/D, Пробел/Shift высота, мышь — наклон камеры, колесо — зум. Центр экрана — цель: ЛКМ/F выстрел, R залп, E выйти, V (или тап по панели) — вид со стороны. Видно прилёты, недолёт/перелёт и состояние дома</dd>
    <dt>E у артиллерии</dt><dd>управлять установкой: A/D — поворот, W/S — дальность, R/F — выстрел, E — выйти</dd>
   <dt>F</dt><dd>выстрел</dd>
   <dt>1 / 2 / 3 / 4 / Q</dt><dd>пистолет / коктейль Климова / АК-47 / РПГ-7 (F — выстрел)</dd>
@@ -1404,7 +1407,7 @@ function drawMap(){
  mx.translate(W/2,W/2);mx.rotate(Math.PI-(player.car?player.car.h:player.h));mx.fillStyle='#fff';mx.strokeStyle='#000';mx.lineWidth=3;
  mx.beginPath();mx.moveTo(0,-13);mx.lineTo(9,10);mx.lineTo(0,5);mx.lineTo(-9,10);mx.closePath();mx.stroke();mx.fill();mx.restore()}
 // ===== input =====
-addEventListener('keydown',e=>{keys[e.code]=true;if(e.code==='KeyC'){camOff=0;camP=0;camZ=1;camUser=false}if(e.code==='KeyE'&&!e.repeat){if(RC.active){stopRecon();return}if(ART.controlled){exitArtillery();return}if(SHA.active){stopShahed(false);return}interact();return}if(e.code==='KeyT'&&!e.repeat){toggleRecon();return}if(e.code==='KeyV'&&!e.repeat&&RC.active){RC.chase=!RC.chase;document.body.classList.toggle('rchase',RC.chase);return}if(e.code==='KeyG'&&!e.repeat){if(RC.active)return;toggleShahed();return}if(e.code==='KeyR'&&!e.repeat){fireArtillery();return}if(e.code==='KeyH'&&!e.repeat&&!RC.active)callHeli();if(e.code==='KeyF'){if(RC.active){reconFire(1);return}if(ART.controlled){fireArtillery();return}if(SHA.active){explodeShahed();return}fire()}if(e.code==='Digit1')setWeapon(0);if(e.code==='Digit2')setWeapon(1);if(e.code==='Digit3')setWeapon(2);if(e.code==='Digit4')setWeapon(3);if(e.code==='KeyQ')setWeapon((weapon+1)%4);if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault()});
+addEventListener('keydown',e=>{keys[e.code]=true;if(e.code==='KeyC'){camOff=0;camP=0;camZ=1;camUser=false}if(e.code==='KeyE'&&!e.repeat){if(RC.active){stopRecon();return}if(ART.controlled){exitArtillery();return}if(SHA.active){stopShahed(false);return}interact();return}if(e.code==='KeyJ'&&!e.repeat){toggleRecon();return}if(e.code==='KeyV'&&!e.repeat&&RC.active){RC.chase=!RC.chase;document.body.classList.toggle('rchase',RC.chase);return}if(e.code==='KeyG'&&!e.repeat){if(RC.active)return;toggleShahed();return}if(e.code==='KeyR'&&!e.repeat){fireArtillery();return}if(e.code==='KeyH'&&!e.repeat&&!RC.active)callHeli();if(e.code==='KeyF'){if(RC.active){reconFire(1);return}if(ART.controlled){fireArtillery();return}if(SHA.active){explodeShahed();return}fire()}if(e.code==='Digit1')setWeapon(0);if(e.code==='Digit2')setWeapon(1);if(e.code==='Digit3')setWeapon(2);if(e.code==='Digit4')setWeapon(3);if(e.code==='KeyQ')setWeapon((weapon+1)%4);if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault()});
 addEventListener('keyup',e=>{keys[e.code]=false});
 const ptrs=new Map();let pinch0=0;
 $('c').addEventListener('pointerdown',e=>{ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});if(ptrs.size===2){const[a,b]=[...ptrs.values()];pinch0=Math.hypot(a.x-b.x,a.y-b.y)}});
@@ -2035,6 +2038,8 @@ function reconFx(dt){const sp=Math.hypot(RC.vx,RC.vz);
  if(RC.m){RC.m.visible=RC.chase;RC.m.position.set(RC.x,RC.y,RC.z);RC.m.rotation.y=RC.h;RC.m.rotation.x=clamp(sp*.012,0,.35);for(const r of RC.m.userData.rot)r.rotation.y+=dt*60}
  if(RC.snd){const f=150+sp*3+Math.abs(RC.vy)*4;RC.snd.o.frequency.value=f;RC.snd.o2.frequency.value=f+4;RC.snd.g.gain.value=muted?0:(RC.chase?.06:.04)}}
 $('ri').addEventListener('click',()=>{if(RC.active){RC.chase=!RC.chase;document.body.classList.toggle('rchase',RC.chase)}});
+$('rV').addEventListener('pointerdown',e=>{if(RC.active){RC.chase=!RC.chase;document.body.classList.toggle('rchase',RC.chase)}e.preventDefault();e.stopPropagation()});
+$('rF').addEventListener('pointerdown',e=>{if(RC.active)reconFire(3);e.preventDefault();e.stopPropagation()});
 function reconHud(){
  const b=RC.bld,fl=ART.shells.reduce((a,s)=>s.rc?Math.min(a,s.dur-s.t):a,99),f=b?Math.max(0,b.hp)/b.hp0:0,n=Math.round(f*10);
  RC.log=RC.log.filter(l=>l.e>time);
