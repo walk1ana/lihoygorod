@@ -91,7 +91,7 @@ body{position:fixed;inset:0}
 .tb{width:78px;height:78px;font-size:16px}.tb.s{width:58px;height:58px}
 #intro{overflow:auto;align-items:flex-start}#intro .box{margin:auto}
 #intro .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-#gq,#mChar{font:16px/1 var(--display);letter-spacing:.08em;padding:12px 16px;border:2px solid rgba(255,255,255,.4);border-radius:4px;background:transparent;color:var(--ink);cursor:pointer}
+#gq,#mChar,#mStory{font:16px/1 var(--display);letter-spacing:.08em;padding:12px 16px;border:2px solid rgba(255,255,255,.4);border-radius:4px;background:transparent;color:var(--ink);cursor:pointer}
 #intro dl.tc{display:none}
 @media (pointer:coarse){#intro dl.kb{display:none}#intro dl.tc{display:grid}}
 @media (max-width:640px) and (orientation:portrait){#ava{width:44px;height:44px;border-width:2px}#cash{font-size:26px}.bar{width:104px}#stars{font-size:18px}#map{width:96px;height:96px}#speed{top:112px;font-size:22px}#mission{left:max(16px,env(safe-area-inset-left,0px));top:132px;transform:none;max-width:calc(100vw - 32px)}#drift{top:176px;font-size:28px}#toast{font-size:24px;bottom:30%}}
@@ -179,6 +179,23 @@ body.incar #bAct{right:max(104px,calc(98px + env(safe-area-inset-right,0px)));bo
 #bm .bh{max-width:1400px}.bb{display:flex;gap:6px;align-items:center}.bb button{height:44px;min-width:44px;padding:0 12px;border-radius:22px;border:2px solid rgba(255,255,255,.3);background:var(--panel);color:var(--ink);font:16px/1 var(--display);letter-spacing:.04em}#bhint{font-size:12px;color:var(--dim);text-align:center}
 #bleg{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;max-width:900px;font-size:12px;color:var(--dim)}
 #bleg i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+#story{position:fixed;inset:0;z-index:10;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(14,10,22,.96);overflow:auto}
+#story .sb{max-width:480px;width:100%;display:flex;flex-direction:column;gap:14px;margin:auto}
+#story .sk{font:16px/1 var(--display);letter-spacing:.12em;color:var(--hot)}
+#story h2{margin:0;font:clamp(40px,11vw,64px)/.95 var(--display);letter-spacing:.04em;color:var(--accent);text-shadow:0 3px 0 #000}
+#story p{margin:0;line-height:1.55;font-size:16px;color:var(--ink)}
+#story .sr{display:flex;gap:10px;align-items:center}
+#story .sr button{font:20px/1 var(--display);letter-spacing:.08em;padding:12px 18px;border:2px solid rgba(255,255,255,.4);border-radius:4px;background:transparent;color:var(--ink);cursor:pointer}
+#story .sr button#sNext{background:var(--accent);color:#1a1424;border-color:var(--accent);margin-left:auto}
+#story .sd{display:flex;gap:6px}#story .sd i{width:22px;height:4px;border-radius:2px;background:rgba(255,255,255,.2)}#story .sd i.on{background:var(--accent)}
+#story .sf{display:flex;flex-direction:column;gap:6px;font-size:15px}#story .sf b{color:var(--accent)}
+#ending{position:fixed;inset:0;z-index:11;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(14,10,22,.97);overflow:auto}
+#ending .sb{max-width:480px;width:100%;display:flex;flex-direction:column;gap:14px;margin:auto}
+#ending h2{margin:0;font:clamp(40px,11vw,64px)/.95 var(--display);letter-spacing:.04em;color:var(--accent);text-shadow:0 3px 0 #000}
+#ending p{margin:0;line-height:1.55;font-size:16px;color:var(--ink)}
+#ending button{font:22px/1 var(--display);letter-spacing:.06em;padding:14px 18px;border:2px solid rgba(255,255,255,.4);border-radius:4px;background:transparent;color:var(--ink);cursor:pointer;text-align:left}
+#ending button small{display:block;font:14px/1.3 var(--body);letter-spacing:0;color:var(--dim);margin-top:6px}
+#ending button.pri{background:var(--accent);color:#1a1424;border-color:var(--accent)}#ending button.pri small{color:#3a2a14}
 </style>
 </head>
 <body>
@@ -236,8 +253,10 @@ body.incar #bAct{right:max(104px,calc(98px + env(safe-area-inset-right,0px)));bo
   <dt>E у бездомного</dt><dd>дать $10</dd><dt>N</dt><dd>большая карта (или тап по миникарте)</dd><dt>🌐 / Enter / P</dt><dd>онлайн: сессия по коду, чат, список игроков</dd><dt>Мышь / ← →</dt><dd>камера (клик по игре — захват курсора, Esc — отпустить)</dd>
   </dl><dl class="tc"><dt>Левый палец</dt><dd>джойстик: идти пешком</dd><dt>В машине</dt><dd>слева стрелки руля, справа ГАЗ и ТОРМОЗ (назад)</dd><dt>Правая часть</dt><dd>камера (свайп)</dd><dt>Миникарта</dt><dd>тап — большая карта города</dd><dt>СЕСТЬ · ВОЙТИ</dt><dd>машина / дверь здания</dd><dt>ОГОНЬ · ОРУЖ.</dt><dd>выстрел · смена оружия</dd><dt>ПРЫЖОК · РУЧНИК</dt><dd>прыжок пешком, ручник в машине</dd></dl>
   <div class="row" id="introCh"></div>
-  <div class="row"><button id="go">ПОЕХАЛИ</button><button id="gq" type="button"></button><button id="mChar" type="button">ПЕРСОНАЖ</button></div>
+  <div class="row"><button id="go">ПОЕХАЛИ</button><button id="gq" type="button"></button><button id="mChar" type="button">ПЕРСОНАЖ</button><button id="mStory" type="button">СЮЖЕТ</button></div>
 </div></div>
+<div id="ending"><div class="sb" id="eB"></div></div>
+<div id="story"><div class="sb"><div class="sk" id="sK"></div><h2 id="sT"></h2><div id="sP"></div><div class="sd" id="sD"></div><div class="sr"><button id="sPrev" type="button">НАЗАД</button><button id="sClose" type="button">ЗАКРЫТЬ</button><button id="sNext" type="button">ДАЛЬШЕ</button></div></div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 (()=>{
@@ -1344,6 +1363,69 @@ function jailNPCs(){const J=JAIL;if(!J)return;const g=buildFigure({shirt:0x2b334
  [[-12,5,-1],[-8,6.5,2.4],[-14,-6.2,1.6]].forEach(([a,b,h])=>{const q=buildFigure({shirt:0xe07a1a,pants:0xe07a1a});q.position.set(J.cx+a,0,J.cz+b);q.rotation.y=h});
  [[9,13.4+1.9,Math.PI],[1,6.5,Math.PI*.5]].forEach(([a,b,h])=>{const q=buildFigure({shirt:0x2b3340,pants:0x14182a,cop:1});q.position.set(J.cx+a,0,J.cz+b);q.rotation.y=h});}
 
+/* ===== сюжетная кампания: миссии и финалы ===== */
+const CHN=['СВОБОДА','ДРОН','БОЛЬШОЙ КУШ','ПРЕДАТЕЛЬСТВО','ШТАБ НА ВЫСОТКЕ'];
+const STEPS=[
+{ch:0,k:'deliver',n:3,t:'ПЕРВЫЕ ДЕНЬГИ',in:'Вози посылки и копи на операцию матери',out:'Первый взнос за операцию внесён',rw:500},
+{ch:1,k:'goto',t:'КРЫША СТАРОГО ДОМА',in:'Найди Дрона на крыше старого дома',out:'Дрон: «Не сдашь? Тогда я твой»',rw:300,min:150},
+{ch:1,k:'deliver',n:2,t:'РАБОТА ВДВОЁМ',out:'Дрон показал город с воздуха',rw:800},
+{ch:2,k:'goto',t:'СКЛАД ВОЛЬСКОГО',in:'Дрон отключил охрану. Иди на склад',out:'Склад вскрыт, но сработала тревога',rw:0,min:200},
+{ch:2,k:'escape',t:'УЙДИ С ДОБЫЧЕЙ',time:90,in:'Засада! Добирайся до укрытия и уйди от погони',out:'Добыча у тебя, а в сумке документы фонда',rw:5000,min:200,col:0x4fe3a0},
+{ch:3,k:'chase',t:'ОТОРВИСЬ ОТ ПОГОНИ',in:'Тебя сдали, деньги отобраны. Беги!',out:'Погоня отстала. Теперь ты знаешь, кто тебя сдал',rw:0},
+{ch:4,k:'finale',t:'ШТАБ НА ВЫСОТКЕ',in:'Дрон работал на Вольского не по своей воле. Иди в штаб',min:250}
+];
+const END=[
+{n:'МЕСТЬ',d:'Убить Вольского.',t:'Ты нажимаешь на курок, и Вольский падает. Синдикат остаётся без головы. Дрон бросается наперерез последней пуле и больше не поднимается. Мать получает лечение, но цену этой ночи ты будешь помнить всегда.',rw:0},
+{n:'ПОБЕГ',d:'Забрать деньги и уехать вместе.',t:'На рассвете вы с Дроном уезжаете из города. Операция матери оплачена, фонд не увидит ни копейки, зато вы вместе и на свободе.',rw:50000},
+{n:'ПРАВДА',d:'Отдать документы журналистам.',t:'Документы уходят в редакции. К утру синдикат под следствием, фонд возвращает деньги, мать получает лечение. Но Вольские такого не прощают, и вам с Дроном приходится исчезнуть.',rw:20000}
+];
+const story={step:0,cnt:0,t:0,el:0,calm:0,ch:-1,done:false,ending:false};
+try{const sv=JSON.parse(localStorage.getItem('lg_story')||'null');if(sv){story.step=Math.max(0,Math.min(sv.step|0,STEPS.length-1));story.done=!!sv.done}}catch(e){}
+const storySave=()=>{try{localStorage.setItem('lg_story',JSON.stringify({step:story.step,done:story.done}))}catch(e){}};
+const storyOn=()=>{if(story.done)return false;try{return !NET.on}catch(e){return true}};
+function storyAdvance(){story.step=Math.min(story.step+1,STEPS.length-1);story.cnt=0;story.t=0;story.el=0;story.calm=0;storySave()}
+function storyReward(st){if(st.rw)player.cash+=st.rw;toast(st.out+(st.rw?' · +$'+st.rw:''),'#4fe3a0');beep(880,.25,'sine',.14)}
+function storyDelivered(){if(!storyOn())return;const st=STEPS[story.step];if(st.k!=='deliver')return;story.cnt++;
+ if(story.cnt>=st.n){storyAdvance();setTimeout(()=>storyReward(st),1300)}}
+function storyStart(){
+ const st=STEPS[story.step];
+ if(st.k==='deliver'){mis.stage=0;[mis.x,mis.z]=pickNode(player.x,player.z,110);setMarker(0x40e0ff);$('mt').textContent='ЗАБЕРИ ПОСЫЛКУ'}
+ else{mis.stage=1;[mis.x,mis.z]=pickNode(player.x,player.z,st.min||160);setMarker(st.col||0xff3b4e);$('mt').textContent=st.t;
+  story.t=st.time||0;story.el=0;story.calm=0;
+  if(st.k==='escape')heat=Math.max(heat,6);
+  if(st.k==='chase'){player.cash=Math.min(player.cash,200);heat=Math.max(heat,9);mk3.position.y=-100}}
+ const first=st.ch!==story.ch;story.ch=st.ch;
+ const msg=(first?'ГЛАВА '+(st.ch+1)+' · '+CHN[st.ch]+(st.in?': ':''):'')+(st.in||'');
+ if(started&&msg)setTimeout(()=>{if(storyOn())toast(msg,'#ffb21e')},1800)}
+function newMission(){if(storyOn())storyStart();else newMissionOld()}
+function storyDone(st){
+ mk3.position.y=-100;mis.stage=2;
+ if(st.k==='finale'){story.ending=true;paused=true;showEnding();return}
+ storyReward(st);storyAdvance();mis.wait=1.5}
+function updateMission(dt){
+ if(!storyOn()){updateMissionOld(dt);return}
+ if(story.ending)return;
+ if(mis.wait>0){updateMissionOld(dt);return}
+ const st=STEPS[story.step];
+ if(st.k==='deliver'){updateMissionOld(dt);if(mis.stage<2)$('md').textContent+=' · '+story.cnt+'/'+st.n;return}
+ const px=player.car?player.car.x:player.x,pz=player.car?player.car.z:player.z,d=Math.hypot(mis.x-px,mis.z-pz);
+ $('mt').textContent=st.t;
+ if(st.k==='chase'){story.el+=dt;if(stars===0)story.calm+=dt;else story.calm=0;
+  $('md').textContent='уйди от копов '+'★'.repeat(stars);
+  if(story.el>8&&story.calm>4)storyDone(st);return}
+ $('md').textContent=Math.round(d)+' м'+(st.time?' · '+Math.max(0,Math.ceil(story.t))+' с':'');
+ if(st.time){story.t-=dt;if(story.t<=0){toast('ВРЕМЯ ВЫШЛО, попробуй ещё раз','#ff3b4e');mk3.position.y=-100;mis.wait=1.5;mis.stage=2;heat=0;return}}
+ if(d<6)storyDone(st);
+ ring.rotation.z+=dt*2;ring.position.y=.6+Math.sin(time*3)*.2}
+const eo=$('ending'),eB=$('eB');
+function showEnding(){
+ eB.innerHTML='<p style="color:var(--hot);font:16px/1 var(--display);letter-spacing:.12em">ГЛАВА 5 · ФИНАЛ</p><h2>ВЫБОР</h2><p>Вольский загнан в угол на крыше. Между вами стоит Дрон. В руках у тебя документы фонда и ключи от вертолёта. Что ты выберешь?</p>'+END.map((e,i)=>'<button data-e="'+i+'">'+e.n+'<small>'+e.d+'</small></button>').join('');
+ eo.style.display='flex'}
+eB.addEventListener('click',ev=>{const b=ev.target.closest('button');if(!b)return;
+ if(b.dataset.e!==undefined){const e=END[+b.dataset.e];player.cash+=e.rw;
+  eB.innerHTML='<p style="color:var(--hot);font:16px/1 var(--display);letter-spacing:.12em">ФИНАЛ</p><h2>'+e.n+'</h2><p>'+e.t+'</p><button class="pri" data-a="go">ИГРАТЬ ДАЛЬШЕ<small>Свободная игра в городе</small></button><button data-a="re">ПРОЙТИ ЗАНОВО<small>Кампания начнётся с первой главы</small></button>'}
+ else if(b.dataset.a==='go'){story.done=true;story.ending=false;storySave();eo.style.display='none';paused=false;mis.wait=0;newMission()}
+ else if(b.dataset.a==='re'){try{localStorage.removeItem('lg_story')}catch(e){}location.reload()}});
 // ===== missions =====
 const mis={stage:0,x:0,z:0,ax:0,az:0,time:0,wait:0};
 const mk3=new THREE.Group();
@@ -1352,14 +1434,14 @@ const ring=new THREE.Mesh(new THREE.TorusGeometry(3.2,.25,8,24),new THREE.MeshBa
 mk3.add(beam,ring);scene.add(mk3);
 function pickNode(fx,fz,min){let i,j,t=0;do{i=Math.floor(R(0,N+1));j=JR0+Math.floor(R(0,JR1-JR0+1));t++}while((Math.hypot(i*P-fx,j*P-fz)<min||(i===C6&&j===C6))&&t<40);return[i*P,j*P]}
 function setMarker(col){beam.material.color.set(col);ring.material.color.set(col);mk3.position.set(mis.x,0,mis.z)}
-function newMission(){mis.stage=0;[mis.x,mis.z]=pickNode(player.x,player.z,110);setMarker(0x40e0ff);$('mt').textContent='ЗАБЕРИ ПОСЫЛКУ'}
-function updateMission(dt){
+function newMissionOld(){mis.stage=0;[mis.x,mis.z]=pickNode(player.x,player.z,110);setMarker(0x40e0ff);$('mt').textContent='ЗАБЕРИ ПОСЫЛКУ'}
+function updateMissionOld(dt){
  if(mis.wait>0){mis.wait-=dt;if(mis.wait<=0)newMission();return}
  const px=player.car?player.car.x:player.x,pz=player.car?player.car.z:player.z,d=Math.hypot(mis.x-px,mis.z-pz);
  if(mis.stage===0&&d<6){mis.stage=1;mis.ax=mis.x;mis.az=mis.z;[mis.x,mis.z]=pickNode(mis.ax,mis.az,130);
   const dist=Math.hypot(mis.x-mis.ax,mis.z-mis.az);mis.time=dist/12+22;mis.len=dist;setMarker(0xffb21e);$('mt').textContent='ДОСТАВЬ ПОСЫЛКУ';toast('Посылка у тебя! Жми к жёлтой точке','#ffb21e');beep(660,.15,'sine',.12)}
  else if(mis.stage===1){mis.time-=dt;
-  if(d<6){const r=Math.round(120+mis.len*1.4);player.cash+=r;toast('ДОСТАВЛЕНО +$'+r,'#4fe3a0');beep(880,.25,'sine',.14);mk3.position.y=-100;mis.wait=1.5;mis.stage=2;$('mt').textContent='ОТЛИЧНО!'}
+  if(d<6){const r=Math.round(120+mis.len*1.4);player.cash+=r;toast('ДОСТАВЛЕНО +$'+r,'#4fe3a0');beep(880,.25,'sine',.14);mk3.position.y=-100;mis.wait=1.5;mis.stage=2;$('mt').textContent='ОТЛИЧНО!';storyDelivered()}
   else if(mis.time<=0){toast('ВРЕМЯ ВЫШЛО','#ff3b4e');mk3.position.y=-100;mis.wait=1.5;mis.stage=2;$('mt').textContent='ПРОВАЛ'}}
  $('md').textContent=mis.stage===0?Math.round(d)+' м':mis.stage===1?Math.round(d)+' м · '+Math.max(0,Math.ceil(mis.time))+' с':''
  ring.rotation.z+=dt*2;ring.position.y=.6+Math.sin(time*3)*.2}
@@ -1456,6 +1538,26 @@ $('bShahed').addEventListener('pointerdown',e=>{if(!RC.active)toggleShahed();e.s
 $('bArt').addEventListener('pointerdown',e=>{fireArtillery();e.stopPropagation()});$('bRecon').addEventListener('pointerdown',e=>{toggleRecon();e.stopPropagation()});
 $('bPantsir').addEventListener('pointerdown',e=>{togglePantsir();e.stopPropagation()});
 const gq=$('gq'),gqL=()=>{const t='ГРАФИКА: '+(HQ?'ВЫСОКАЯ':'ЛЁГКАЯ');gq.textContent=t;$('mGfx').textContent=t};gqL();gq.addEventListener('click',()=>{setHQ(!HQ);gqL()});
+/* СЮЖЕТ: одиночная кампания */
+const STORY=[
+{k:'ГЛАВА 1',t:'СВОБОДА',p:['Ты выходишь из колонии раньше срока. В кармане пусто, а матери срочно нужна дорогостоящая операция.','Лихой Город держит синдикат «Серый Квартал» во главе с Аркадием Вольским. Здесь честно не заработаешь, поэтому ты берёшься за посылки и угоны.'],g:'Вози посылки и копи деньги.'},
+{k:'ГЛАВА 2',t:'ДРОН',p:['На крыше старого дома ты находишь Данила по прозвищу Дрон. Он бывший оператор дронов и по случайности снял на камеру лицо Вольского.','Теперь за ним охотится весь синдикат. Ты решаешь прикрыть его, а он за это водит тебя по городу с воздуха.'],g:'Бери разведдрон, облетай районы, следи за людьми Вольского.'},
+{k:'ГЛАВА 3',t:'БОЛЬШОЙ КУШ',p:['Вы планируете налёт на склад Вольского с вертолётной площадкой. Дрон взламывает охрану, ты идёшь внутрь.','Налёт удаётся, но на выходе засада. Дрона ранят, ты уходишь с добычей. В сумке лежат документы: деньги принадлежат городскому фонду, на котором держится и лечение твоей матери.'],g:'Ограбь склад, уйди от погони на вертолёте.'},
+{k:'ГЛАВА 4',t:'ПРЕДАТЕЛЬСТВО',p:['Твоё укрытие накрыли. Кто-то сдал тебя Вольскому, и ты быстро понимаешь, кто.','Деньги отобраны, союзников нет, на хвосте розыск. Ты один против всего города.'],g:'Выживи, набери звёзд розыска и не дай себя поймать.'},
+{k:'ГЛАВА 5',t:'ШТАБ НА ВЫСОТКЕ',p:['Ты пробиваешься к штаб-квартире Вольского. По дороге выясняется, что Дрон работал на него не по своей воле: синдикат держал его семью.','Последний налёт: перестрелка по этажам, вертолёты, разговор с Дроном на крыше. Решать тебе.'],g:'Добраться до штаба и выбрать финал.',f:[['МЕСТЬ','Убить Вольского, но потерять Дрона.'],['ПОБЕГ','Забрать деньги и уехать из города вдвоём.'],['ПРАВДА','Отдать документы журналистам. Синдикат рухнет, а вам придётся бежать.']]}
+];
+{let si=0;const se=$('story');
+function drawStory(){const c=STORY[si];$('sK').textContent=c.k+' / '+STORY.length;$('sT').textContent=c.t;
+$('sP').innerHTML=c.p.map(x=>'<p>'+x+'</p>').join('')+'<p style="margin-top:12px;color:var(--accent)"><b>ЦЕЛЬ:</b> '+c.g+'</p>'+(c.f?'<div class="sf" style="margin-top:12px">'+c.f.map(f=>'<span><b>'+f[0]+'.</b> '+f[1]+'</span>').join('')+'</div>':'');
+$('sD').innerHTML=STORY.map((_,i)=>'<i'+(i===si?' class="on"':'')+'></i>').join('');
+$('sPrev').style.visibility=si?'visible':'hidden';$('sNext').textContent=si<STORY.length-1?'ДАЛЬШЕ':'ГОТОВО'}
+function openStory(){si=0;drawStory();se.style.display='flex'}
+function closeStory(){se.style.display='none'}
+$('mStory').addEventListener('click',openStory);
+$('sClose').addEventListener('click',closeStory);
+$('sPrev').addEventListener('click',()=>{if(si>0){si--;drawStory()}});
+$('sNext').addEventListener('click',()=>{if(si<STORY.length-1){si++;drawStory()}else closeStory()});
+$('go').addEventListener('click',()=>{setTimeout(()=>{if(!storyOn())return;const st=STEPS[story.step];toast('ГЛАВА '+(st.ch+1)+' · '+CHN[st.ch]+': '+(st.in||st.t),'#ffb21e')},3500)});}
 $('go').addEventListener('click',()=>{$('intro').style.display='none';started=true;plLock();startCine('intro');audioInit();sampleInit();akShotInit();if(muted&&AC)AC.suspend();engineSampleInit();
  if(IS_TOUCH){try{const r=document.documentElement,f=r.requestFullscreen||r.webkitRequestFullscreen;if(f){const p=f.call(r);p&&p.catch&&p.catch(()=>{})}}catch(e){}}});
 // ===== menu + appearance =====
